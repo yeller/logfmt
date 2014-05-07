@@ -1,4 +1,5 @@
 #!/bin/bash
 
 set -e
-grench eval "(do (require '[logfmt :reload true]) (require '[logfmt-test :reload true]) (require 'clojure.test) (clojure.test/run-all-tests #\"logfmt.*\"))"
+grench eval "(do (require 'clojure.tools.namespace.repl) (clojure.tools.namespace.repl/refresh))"
+grench eval "(do (clojure.test/run-all-tests #\"logfmt.*\"))"

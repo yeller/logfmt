@@ -1,0 +1,4 @@
+#!/bin/bash
+
+set -e
+lein with-profile bench run -m logfmt-bench
