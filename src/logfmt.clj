@@ -12,7 +12,8 @@
   "takes a map, and turns it into a logfmt string. sorts the order of the keys
   output, so your log messages are stable"
   [m]
-  "")
+  (s/join " "
+          (map (fn [[k v]] (str (name k) "=" v)) m)))
 
 (defn out
   "formats a static pair of keys/values and logs it to stdout specifically
