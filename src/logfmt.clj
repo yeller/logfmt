@@ -15,17 +15,25 @@
   (s/join " "
           (map (fn [[k v]] (str (name k) "=" v)) m)))
 
-(defn out
+(defmacro out
   "formats a static pair of keys/values and logs it to stdout specifically
   designed for speed - at compile time it expands into a java.String.format
-  call"
-  [& pairs]
-  (println (apply msg pairs)))
+  call
 
-(defn err
+  (out :foo a) expands to
+  (println (str \"foo= \" a))
+
+  (out :foo a :bar 1) expands to
+  (println (str \"foo= \" a \" bar=1\"))
+  "
+  [& pairs]
+  `(println (msg ~@pairs)))
+
+(defmacro err
   "formats a static pair of keys/values and logs it to stderr specifically
   designed for speed - at compile time it expands into a java.String.format
-  call"
+  call
+  expands exactly like logfmt/out, except it prints to stderr"
   [& pairs]
   (binding [*out* *err*]
-    (println (apply msg pairs))))
+    `(println (msg ~@pairs))))
