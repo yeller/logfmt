@@ -23,11 +23,15 @@ There are 4 main pieces to the api:
 The last two are macros that expand a reasonable amount of string concatenation
 at compile time.
 
+## Why Isn't it a map?
+
 This is literally the only clojure api I've ever released that doesn't use a
 map for what is conceptually a map of options. This is because, for logfmt,
 you *really* want the order of your keys to be the same across calls, otherwise your
 logs get impossible to read. That could be accomplished with sorting the keys before
 printing, but I wanted to have actual control over that order as well.
+
+## Ring Middleware
 
 There's also a ring middleware that wraps logging in this style (to stdout), `logfmt.ring/wrap-logging`
 Output looks like this:
