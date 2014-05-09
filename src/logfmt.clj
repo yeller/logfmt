@@ -18,7 +18,8 @@
 
 (defn format-pairs
   "helper function for out and err
-   expands any literal values into string values"
+   expands any literal values into string values, removing string concatenation
+   at runtime"
   [pairs]
   (let [partitioned-pairs (partition 2 pairs)]
     `(str
@@ -41,24 +42,23 @@
                    (conj out (str (name k) "=" v))))))))))
 
 (defmacro out
-  "formats a static pair of keys/values and logs it to stdout specifically
-  designed for speed - at compile time it expands into a java.String.format
-  call
+  "formats a static pair of keys/values and logs it to stdout. Specifically
+   designed for speed - does a bunch of string concatenation at compile time
 
-  (out :foo a) expands to
+  (out :foo a) expands to something like
   (println (str \"foo= \" a))
 
-  (out :foo a :bar 1) expands to
+  (out :foo a :bar 1) expands to something like
   (println (str \"foo= \" a \" bar=1\"))
   "
   [& pairs]
   `(println ~(format-pairs pairs)))
 
 (defmacro err
-  "formats a static pair of keys/values and logs it to stderr specifically
-  designed for speed - at compile time it expands into a java.String.format
-  call
-  expands exactly like logfmt/out, except it prints to stderr"
+  "formats a static pair of keys/values and logs it to stderr. Specifically
+   designed for speed - does a bunch of string concatenation at compile time
+
+   expands exactly like logfmt/out, except it prints to stderr"
   [& pairs]
   (binding [*out* *err*]
     `(println ~(format-pairs pairs))))
