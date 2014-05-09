@@ -16,9 +16,14 @@
          (map->msg {:foo "bar" :baz "1"}))))
 
 (deftest out-formats-a-msg-to-stdout
-  (is (= "foo=bar baz=1\n"
-         (with-out-str
-           (out :foo "bar" :baz 1)))))
+  (testing "all literals"
+    (is (= "foo=bar baz=1\n"
+           (with-out-str
+             (out :foo "bar" :baz 1)))))
+  (testing "a variable"
+    (let [a 1]
+      (is (= "foo=bar baz=1\n"
+             (with-out-str (out :foo "bar" :baz a)))))))
 
 (deftest err-formats-a-msg-to-stderr
   (is (= "foo=bar baz=1\n"
