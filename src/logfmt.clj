@@ -16,6 +16,11 @@
   (s/join " "
           (map (fn [[k v]] (str (name k) "=" v)) m)))
 
+(defn atomic-literal? [x]
+  (or (string? x)
+      (keyword? x)
+      (number? x)))
+
 (defn format-pairs
   "helper function for out and err
    expands any literal values into string values, removing string concatenation
@@ -33,13 +38,13 @@
                (rest remaining)
 
                (if (first out)
-                 (if (symbol? v)
-                   (conj out (str " " (name k) "=") v)
-                   (conj out (str " " (name k) "=" v)))
+                 (if (atomic-literal? v)
+                   (conj out (str " " (name k) "=" v))
+                   (conj out (str " " (name k) "=") v))
 
-                 (if (symbol? v)
-                   (conj out (str (name k) "=") v)
-                   (conj out (str (name k) "=" v))))))))))
+                 (if (atomic-literal? v)
+                   (conj out (str (name k) "=" v))
+                   (conj out (str (name k) "=") v)))))))))
 
 (defmacro out
   "formats a static pair of keys/values and logs it to stdout. Specifically
