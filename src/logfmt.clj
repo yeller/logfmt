@@ -23,8 +23,8 @@
 
 (defn format-pairs
   "helper function for out and err
-   expands any literal values into string values, removing string concatenation
-   at runtime"
+   expands any literal values into string values, doing string concatenation
+   at compile time"
   [pairs]
   (let [partitioned-pairs (partition 2 pairs)]
     `(str
