@@ -46,6 +46,11 @@
                    (conj out (str (name k) "=" v))
                    (conj out (str (name k) "=") v)))))))))
 
+(defn safe-println
+  "a println that doesn't have race conditions"
+  [x]
+  (.write *out* (str x "\n")))
+
 (defmacro out
   "formats a static pair of keys/values and logs it to stdout. Specifically
    designed for speed - does a bunch of string concatenation at compile time
@@ -57,7 +62,7 @@
   (println (str \"foo= \" a \" bar=1\"))
   "
   [& pairs]
-  `(println ~(format-pairs pairs)))
+  `(safe-println ~(format-pairs pairs)))
 
 (defmacro err
   "formats a static pair of keys/values and logs it to stderr. Specifically
@@ -66,4 +71,4 @@
    expands exactly like logfmt/out, except it prints to stderr"
   [& pairs]
   (binding [*out* *err*]
-    `(println ~(format-pairs pairs))))
+    `(safe-println ~(format-pairs pairs))))
