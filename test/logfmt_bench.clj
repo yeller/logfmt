@@ -24,5 +24,4 @@
   (bench
     (with-out-str
       (binding [*err* *out*]
-        (err :foo "bar" :baz "1"))))
-  )
+        (err :foo "bar" :baz "1")))))
